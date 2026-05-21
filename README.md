@@ -16,7 +16,5 @@ Assets/
     ├── Events/
     │   └── DecisionEventChannelSO.cs
     ├── Level/
-    │   └── SceneTransitionHandler.cs
-    └── Editor/
-        └── DecisionUISetup.cs
+        └── SceneTransitionHandler.cs
 ```
