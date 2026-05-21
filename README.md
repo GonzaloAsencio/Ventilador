@@ -11,18 +11,12 @@ El sistema se basa en el patrón **Observer** con un canal de eventos implementa
 
 ```mermaid
 flowchart TD
-    Player["🎮 Player\n(fan controller)"]
+    Player["Player\n(fan controller)"]
     Trigger["DecisionTrigger\n(MonoBehaviour)"]
     Channel["DecisionEventChannelSO\n(ScriptableObject)"]
     Handler["SceneTransitionHandler\n(MonoBehaviour)"]
-    SceneA["📦 Scene A"]
-    SceneB["📦 Scene B"]
-
-    Player -->|"interacts with UI"| Trigger
-    Trigger -->|"Raise(DecisionType.A/B)"| Channel
-    Channel -->|"notifies subscribers"| Handler
-    Handler -->|"DecisionType.A"| SceneA
-    Handler -->|"DecisionType.B"| SceneB
+    SceneA["Scene A"]
+    SceneB["Scene B"]
 ```
 
 ---
@@ -125,7 +119,6 @@ Assets/
     ├── Events/
     │   └── DecisionEventChannelSO.cs
     ├── Level/
-    │   └── SceneTransitionHandler.cs
-    └── Editor/
-        └── DecisionUISetup.cs     ← Tools → Fan → Setup Decision UI
+         └── SceneTransitionHandler.cs
+ 
 ```
