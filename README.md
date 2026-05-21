@@ -1,5 +1,6 @@
 # FAN
 
+Estrucutra de carpetas
 ```
 Assets/
 ├── Scenes/
