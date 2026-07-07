@@ -11,8 +11,8 @@ namespace Fan.UI
     {
         [Header("Referencias")]
         [SerializeField] private GameObject _contenedor;
-        [Tooltip("Image con Image Type = Filled (Horizontal).")]
-        [SerializeField] private Image _relleno;
+        [Tooltip("Slider con Min Value = 0 y Max Value = 1.")]
+        [SerializeField] private Slider _slider;
 
         private void Awake()
         {
@@ -34,8 +34,8 @@ namespace Fan.UI
 
         public void SetFuerza(float valor01)
         {
-            if (_relleno != null)
-                _relleno.fillAmount = Mathf.Clamp01(valor01);
+            if (_slider != null)
+                _slider.value = Mathf.Clamp01(valor01);
         }
     }
 }

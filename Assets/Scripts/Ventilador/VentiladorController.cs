@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.InputSystem;
 using Fan.Core;
 using Fan.UI;
 
@@ -13,11 +14,6 @@ namespace Fan.Ventilador
         ModoEleccion
     }
 
-    /// <summary>
-    /// Controla la oscilación del ventilador y el Modo Elección (carga de la barra de fuerza).
-    /// Al completarse la barra dispara un UnityEvent (para la consecuencia visual del nivel)
-    /// y luego pide al GameManager avanzar de nivel.
-    /// </summary>
     public class VentiladorController : MonoBehaviour
     {
         [Header("Oscilación")]
@@ -26,8 +22,8 @@ namespace Fan.Ventilador
         [SerializeField] private float _tiempoPausaExtremos = 0.3f;
 
         [Header("Modo Elección")]
-        [SerializeField] private KeyCode _teclaElegir = KeyCode.E;
-        [SerializeField] private KeyCode _teclaCargar = KeyCode.Space;
+        [SerializeField] private Key _teclaElegir = Key.E;
+        [SerializeField] private Key _teclaCargar = Key.Space;
         [SerializeField] private float _incrementoPorPulsacion = 0.15f;
         [Tooltip("Cuánto baja la barra por segundo si no se presiona. 0 = no decae.")]
         [SerializeField] private float _decaimientoPorSegundo = 0f;
@@ -45,10 +41,16 @@ namespace Fan.Ventilador
         private float _timerPausa;
         private float _fuerzaActual;
         private bool _fuerzaCompletada;
+        private Vector3 _rotacionBase;
+
+        private void Awake()
+        {
+            _rotacionBase = transform.localRotation.eulerAngles;
+        }
 
         private void Update()
         {
-            if (Input.GetKeyDown(_teclaElegir) && _estado != EstadoVentilador.ModoEleccion)
+            if (Keyboard.current != null && Keyboard.current[_teclaElegir].wasPressedThisFrame && _estado != EstadoVentilador.ModoEleccion)
             {
                 EntrarModoEleccion();
                 return;
@@ -72,7 +74,7 @@ namespace Fan.Ventilador
         {
             _anguloActual += _velocidadGrados * _direccion * Time.deltaTime;
             _anguloActual = Mathf.Clamp(_anguloActual, -_anguloMaximo, _anguloMaximo);
-            transform.localRotation = Quaternion.Euler(0f, _anguloActual, 0f);
+            transform.localRotation = Quaternion.Euler(_rotacionBase.x, _anguloActual, _rotacionBase.z);
 
             if (Mathf.Abs(_anguloActual) >= _anguloMaximo)
             {
@@ -111,7 +113,7 @@ namespace Fan.Ventilador
             if (_decaimientoPorSegundo > 0f)
                 _fuerzaActual -= _decaimientoPorSegundo * Time.deltaTime;
 
-            if (Input.GetKeyDown(_teclaCargar))
+            if (Keyboard.current != null && Keyboard.current[_teclaCargar].wasPressedThisFrame)
                 _fuerzaActual += _incrementoPorPulsacion;
 
             _fuerzaActual = Mathf.Clamp01(_fuerzaActual);
