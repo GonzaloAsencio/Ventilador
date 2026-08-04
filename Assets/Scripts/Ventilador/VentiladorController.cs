@@ -74,8 +74,7 @@ namespace Fan.Ventilador
         {
             _anguloActual += _velocidadGrados * _direccion * Time.deltaTime;
             _anguloActual = Mathf.Clamp(_anguloActual, -_anguloMaximo, _anguloMaximo);
-            transform.localRotation = Quaternion.Euler(_rotacionBase.x, _anguloActual, _rotacionBase.z);
-
+            transform.localRotation = Quaternion.Euler(_rotacionBase.x, _rotacionBase.y, _anguloActual);
             if (Mathf.Abs(_anguloActual) >= _anguloMaximo)
             {
                 _estado = EstadoVentilador.PausaExtremo;
@@ -132,12 +131,7 @@ namespace Fan.Ventilador
         {
             _onFuerzaCompleta?.Invoke();
 
-            yield return new WaitForSeconds(_delayAntesDeSiguienteNivel);
-
-            if (GameManager.Instance != null)
-                GameManager.Instance.CargarSiguienteNivel();
-            else
-                Debug.LogWarning("[VentiladorController] No hay GameManager en escena.");
+            yield return null;
         }
     }
 }
